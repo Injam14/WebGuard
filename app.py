@@ -3,15 +3,13 @@ import os
 import io
 import json
 import hmac
+
 from urllib.parse import urlparse
 
 from flask import (
     Flask, render_template, request, redirect,
     url_for, flash, send_file, Response
 )
-
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 
 from scanner import scan_website
 from database import init_db, save_scan, get_scans, get_scan
@@ -23,14 +21,6 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 if not app.secret_key:
     raise RuntimeError("SECRET_KEY environment variable is required.")
-
-# Rate limiter: maximum 5 scans per visitor in 10 minutes.
-# Memory storage is suitable for an initial single-instance demo.
-limiter = Limiter(
-    get_remote_address,
-    app=app,
-    storage_uri="memory://"
-)
 
 init_db()
 
@@ -108,7 +98,6 @@ def index():
 
 
 @app.route("/scan", methods=["POST"])
-@limiter.limit("5 per 10 minutes")
 def scan():
     if request.form.get("authorized") != "yes":
         flash(
