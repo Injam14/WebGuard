@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Scan Results | WebGuard{% endblock %}
+{% block heading %}Assessment Results{% endblock %}
+{% block content %}
+<div class="result-top"><div><div class="eyebrow">ASSESSMENT / {{ item.id }}</div><h2>{{ item.target }}</h2><p class="muted">Completed {{ item.created_at }} · HTTP {{ result.status_code }}</p></div><a class="download" href="{{ url_for('report', scan_id=item.id) }}">↓ DOWNLOAD PDF</a></div>
+<section class="grid result-stats">
+  <div class="panel score-panel"><span class="muted">SECURITY SCORE</span><div class="big-score">{{ result.score }}<small>/100</small></div><div class="score-track"><span style="width:{{ result.score }}%"></span></div><small class="muted">Heuristic configuration score, not a certification.</small></div>
+  {% for level, count in result.counts.items() %}<div class="panel mini-stat"><span class="muted">{{ level|upper }}</span><strong>{{ count }}</strong><small>Findings</small></div>{% endfor %}
+</section>
+<section class="panel history">
+  <div class="section-head"><div><div class="eyebrow">DETAIL / 02</div><h3>Security findings</h3></div><span class="tag">{{ result.findings|length }} TOTAL</span></div>
+  {% if result.findings %}
+  {% for f in result.findings %}<article class="finding"><div class="finding-head"><span class="severity {{ f.severity|lower }}">{{ f.severity }}</span><b>{{ f.title }}</b></div><p>{{ f.details }}</p><div class="recommend"><b>RECOMMENDATION</b><br>{{ f.recommendation }}</div></article>{% endfor %}
+  {% else %}<div class="empty">No issues were detected by the configured checks.</div>{% endif %}
+</section>
+<div class="notice">ⓘ {{ result.note }}</div>
+<a class="back-link" href="{{ url_for('index') }}">← BACK TO DASHBOARD</a>
+{% endblock %}

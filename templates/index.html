@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | WebGuard{% endblock %}
+{% block heading %}Security Dashboard{% endblock %}
+{% block content %}
+<section class="welcome"><div><div class="eyebrow">OVERVIEW / 01</div><h2>Assess your web security.</h2><p>Run a controlled, passive review of website security configuration.</p></div><div class="welcome-icon">⌁</div></section>
+<section class="grid stats">
+  <div class="panel stat"><span class="muted">TOTAL ASSESSMENTS</span><strong>{{ scans|length }}</strong><small>Recent scan history</small></div>
+  <div class="panel stat"><span class="muted">LATEST SECURITY SCORE</span><strong>{% if latest %}{{ latest.score }}<i>/100</i>{% else %}—{% endif %}</strong><small>Configuration indicator</small></div>
+  <div class="panel stat"><span class="muted">SCANNER STATUS</span><strong class="online">READY</strong><small>Passive checks enabled</small></div>
+</section>
+<section class="panel scan-panel">
+  <div class="section-head"><div><div class="eyebrow">NEW ASSESSMENT / 02</div><h3>Start a website scan</h3></div><span class="tag">HTTP / HTTPS</span></div>
+  <form method="post" action="{{ url_for('scan') }}">
+    <label for="url">TARGET WEBSITE</label>
+    <div class="input-row"><span>↗</span><input id="url" name="url" type="text" placeholder="https://example.com" required><button type="submit">START SCAN <b>→</b></button></div>
+    <label class="consent"><input type="checkbox" name="authorized" value="yes" required> I own this website or have explicit permission to assess it.</label>
+  </form>
+  <div class="notice">ⓘ WebGuard performs passive configuration checks only. Do not scan systems without authorization.</div>
+</section>
+<section class="panel history">
+  <div class="section-head"><div><div class="eyebrow">ACTIVITY / 03</div><h3>Recent assessments</h3></div></div>
+  {% if scans %}
+  <div class="table-wrap"><table><thead><tr><th>TARGET</th><th>DATE</th><th>SCORE</th><th></th></tr></thead><tbody>
+  {% for s in scans %}<tr><td>{{ s.target }}</td><td>{{ s.created_at }}</td><td><span class="score">{{ s.score }}/100</span></td><td><a class="view-link" href="{{ url_for('results', scan_id=s.id) }}">VIEW →</a></td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty">No assessments yet. Run your first authorized scan above.</div>{% endif %}
+</section>
+{% endblock %}

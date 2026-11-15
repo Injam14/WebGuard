@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}WebGuard{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">W</span><div><b>WEBGUARD</b><small>SECURITY CONSOLE</small></div></div>
+    <div class="nav-label">WORKSPACE</div>
+    <a class="nav active" href="{{ url_for('index') }}">◈ <span>Dashboard</span></a>
+    <div class="side-note"><span class="pulse"></span> PASSIVE SCANNER READY</div>
+    <div class="sidebar-bottom">EDUCATIONAL SECURITY TOOL<br><span>v1.0.0</span></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><span class="eyebrow">CYBERSECURITY / OVERVIEW</span><h1>{% block heading %}Dashboard{% endblock %}</h1></div><div class="top-status"><span class="pulse"></span> SYSTEM ONLINE</div></header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}{% for category, message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+    <footer>WEBGUARD <span>•</span> AUTHORIZED TESTING ONLY <span>•</span> EDUCATIONAL USE</footer>
+  </main>
+</div>
+</body></html>
