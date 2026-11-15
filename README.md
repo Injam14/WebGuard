@@ -52,6 +52,12 @@ WebGuard/
 └── static/
     └── style.css
 ```
+## Live Project Demo
 
+Website: https://webguard-q7nt.onrender.com/
+
+Username: admin
+
+Password: webguard@1234
 ## Evaluation ideas
 Test against a local training app or a site you control. Record known header and cookie configurations, compare expected and observed findings, and calculate precision, recall, false-positive rate, and scan duration. Do not claim the tool detects SQL injection or XSS: those checks are intentionally outside this passive first version.
